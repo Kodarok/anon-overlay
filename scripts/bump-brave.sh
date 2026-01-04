@@ -2,7 +2,7 @@
 set -e
 
 PKGDIR="/var/db/repos/localrepo/www-client/brave-browser"
-TEMPLATE="${PKGDIR}/brave-browser-9999.ebuild"
+TEMPLATE="${PKGDIR}/template/brave-browser-9999.ebuild"
 
 LATEST=$(curl -s https://api.github.com/repos/brave/brave-browser/releases/latest \
   | sed -n 's/.*"tag_name": *"v\([^"]*\)".*/\1/p')

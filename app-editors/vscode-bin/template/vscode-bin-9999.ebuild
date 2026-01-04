@@ -12,3 +12,7 @@ SRC_URI=""
 
 S="${WORKDIR}"
 
+pkg_pretend() {
+die "vscode-bin-9999.ebuild is a template. Do not emerge."
+}
+
