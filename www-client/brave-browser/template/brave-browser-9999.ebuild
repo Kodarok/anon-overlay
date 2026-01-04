@@ -5,7 +5,7 @@ HOMEPAGE="https://brave.com/"
 
 LICENSE="MPL-2.0"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="amd64"
 RESTRICT="fetch mirror"
 
 SRC_URI=""

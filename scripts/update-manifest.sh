@@ -1,15 +1,19 @@
 #!/bin/bash
-set -e
-REPO="/var/db/repos/localrepo"
-cd "$REPO/app-editors/vscode-bin"
+set -euo pipefail
 
-# Mettre à jour le Manifest pour tous les ebuilds
-for e in *.ebuild; do
-    ebuild "$e" manifest
+REPO="/var/db/repos/localrepo"
+
+find "$REPO" -type f -name "*.ebuild" \
+  ! -name "*-9999.ebuild" \
+  ! -path "*/template/*" \
+| while read -r EBUILD; do
+    DIR=$(dirname "$EBUILD")
+    echo "Updating Manifest in $DIR"
+    ( cd "$DIR" && ebuild "$(basename "$EBUILD")" manifest )
 done
 
-# Commit et push les changements Git
-git add *.ebuild Manifest
-git commit -m "Update vscode-bin template and Manifest"
+cd "$REPO"
+git add .
+git commit -m "Update Manifests"
 git push origin main
 

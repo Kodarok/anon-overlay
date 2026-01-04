@@ -5,7 +5,7 @@ HOMEPAGE="https://code.visualstudio.com/"
 
 LICENSE="Microsoft"
 SLOT="0"
-KEYWORDS=""
+KEYWORDS="amd64"
 RESTRICT="fetch mirror"
 
 SRC_URI=""
