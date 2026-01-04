@@ -13,7 +13,3 @@ NEW_EBUILD="${PKGDIR}/vscode-bin-${LATEST}.ebuild"
 cp "${TEMPLATE}" "${NEW_EBUILD}"
 ebuild "${NEW_EBUILD}" manifest
 
-cd /var/db/repos/localrepo
-git add app-editors/vscode-bin/vscode-bin-${LATEST}.ebuild
-git commit -m "Bump vscode-bin to ${LATEST}"
-git push origin main
