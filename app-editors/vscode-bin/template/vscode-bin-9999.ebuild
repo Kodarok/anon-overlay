@@ -1,18 +1,22 @@
 EAPI=8
 
-DESCRIPTION="Visual Studio Code – template ebuild (DO NOT BUILD)"
+DESCRIPTION="Visual Studio Code"
 HOMEPAGE="https://code.visualstudio.com/"
 
 LICENSE="Microsoft"
 SLOT="0"
 KEYWORDS="amd64"
-RESTRICT="fetch mirror"
 
-SRC_URI=""
+SRC_URI="https://update.code.visualstudio.com/@VERSION@/linux-deb-x64/stable -> vscode-@VERSION@.deb"
 
 S="${WORKDIR}"
 
-pkg_pretend() {
-die "vscode-bin-9999.ebuild is a template. Do not emerge."
+src_unpack() {
+	ar x "${DISTDIR}/vscode-@VERSION@.deb" || die
+	tar -xf data.tar.* || die
+}
+
+src_install() {
+	cp -r usr "${D}/" || die
 }
 
