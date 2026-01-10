@@ -11,10 +11,13 @@ SRC_URI="https://github.com/brave/brave-browser/releases/download/v${PV}/brave-b
 S="${WORKDIR}"
 
 src_unpack() {
-	unpack ${A}
+	ar x "${DISTDIR}/${A}" || die
+	mkdir data || die
+	tar -xf data.tar.* -C data || die
 }
 
 src_install() {
-	cp -r usr "${D}/" || die
+	cp -r data/opt "${D}/" || die
+	dosym /opt/brave.com/brave/brave-browser /usr/bin/brave-browser
 }
 
