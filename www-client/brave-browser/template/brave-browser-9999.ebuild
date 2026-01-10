@@ -12,8 +12,7 @@ SRC_URI="https://github.com/brave/brave-browser/releases/download/v@VERSION@/bra
 S="\${WORKDIR}"
 
 src_unpack() {
-	ar x "\${DISTDIR}/brave-browser_@VERSION@_amd64.deb" || die
-	tar -xf data.tar.* || die
+	unpack ${A}
 }
 
 src_install() {
