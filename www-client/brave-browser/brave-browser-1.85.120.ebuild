@@ -2,7 +2,6 @@ EAPI=8
 
 DESCRIPTION="Brave Browser – privacy-focused Chromium-based web browser"
 HOMEPAGE="https://brave.com/"
-
 LICENSE="MPL-2.0"
 SLOT="0"
 KEYWORDS="amd64"
@@ -16,7 +15,6 @@ src_unpack() {
 }
 
 src_install() {
-	cp -r opt "\${D}/" || die
-	dosym /opt/brave.com/brave/brave-browser /usr/bin/brave-browser
+	cp -r usr "${D}/" || die
 }
 
