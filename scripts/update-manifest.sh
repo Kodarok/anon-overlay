@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-REPO="/var/db/repos/localrepo"
+REPO="/usr/local/portage/localrepo"
 
 find "$REPO" -type f -name "*.ebuild" \
   ! -name "*-9999.ebuild" \

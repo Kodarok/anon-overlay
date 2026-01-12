@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-REPO="/var/db/repos/localrepo"
+REPO="/usr/local/portage/localrepo"
 
 bump_package() {
     local PKGDIR="$1"

@@ -11,7 +11,10 @@ SRC_URI="https://github.com/brave/brave-browser/releases/download/v${PV}/brave-b
 
 S="${WORKDIR}"
 
-QA_PREBUILT="*"
+QA_PREBUILT="
+	/opt/brave.com/brave/brave
+	/opt/brave.com/brave/chrome-sandbox
+"
 
 src_unpack() {
 	ar x "${DISTDIR}/${A}" || die
@@ -22,6 +25,12 @@ src_install() {
 	insinto /
 	doins -r opt || die
 
-	dosym /opt/brave.com/brave/brave-browser /usr/bin/brave-browser
-}
+	# Permissions indispensables
+	fperms +x /opt/brave.com/brave/brave
+	fperms +x /opt/brave.com/brave/brave-browser
+	fperms +x /opt/brave.com/brave/chrome-sandbox
 
+	# Commande utilisateur = wrapper
+	dosym /opt/brave.com/brave/brave-browser /usr/bin/brave-browser
+	dosym /opt/brave.com/brave/brave-browser /usr/bin/brave
+}
