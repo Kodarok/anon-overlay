@@ -25,12 +25,15 @@ src_install() {
 	insinto /
 	doins -r opt || die
 
-	# Assurer que les binaires soient exécutables
-	[[ -f "${D}/opt/brave.com/brave/brave" ]] && chmod +x "${D}/opt/brave.com/brave/brave"
-	[[ -f "${D}/opt/brave.com/brave/brave-browser" ]] && chmod +x "${D}/opt/brave.com/brave/brave-browser"
-	[[ -f "${D}/opt/brave.com/brave/chrome-sandbox" ]] && chmod +x "${D}/opt/brave.com/brave/chrome-sandbox"
+	# Forcer exécution sur tous les binaires et le wrapper
+	for f in "${D}/opt/brave.com/brave/brave" \
+			"${D}/opt/brave.com/brave/brave-browser" \
+			"${D}/opt/brave.com/brave/chrome-sandbox"; do
+		[[ -f "$f" ]] && chmod +x "$f"
+	done
 
 	# Symlinks vers le wrapper
 	dosym /opt/brave.com/brave/brave-browser /usr/bin/brave-browser
 	dosym /opt/brave.com/brave/brave-browser /usr/bin/brave
 }
+
