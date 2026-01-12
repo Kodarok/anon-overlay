@@ -25,12 +25,11 @@ src_install() {
 	insinto /
 	doins -r opt || die
 
-	# Permissions indispensables (dans l'image de staging)
+	# Permissions correctes sur la destination finale
 	chmod +x "${D}/opt/brave.com/brave/brave"
 	chmod +x "${D}/opt/brave.com/brave/brave-browser"
-	chmod +x "${D}/opt/brave.com/brave/chrome-sandbox"
 
-	# Symlink vers le wrapper
+	# Symlinks
 	dosym /opt/brave.com/brave/brave-browser /usr/bin/brave-browser
 	dosym /opt/brave.com/brave/brave-browser /usr/bin/brave
 }
