@@ -25,12 +25,12 @@ src_install() {
 	insinto /
 	doins -r opt || die
 
-	# Rendre les binaires exécutables dans le staging final
+	# rendre les binaires exécutables dans le staging final
 	chmod +x "${D}/opt/brave.com/brave/brave"
 	chmod +x "${D}/opt/brave.com/brave/brave-browser"
 	chmod +x "${D}/opt/brave.com/brave/chrome-sandbox"
 
-	# Symlinks vers le wrapper
+	# symlinks vers le wrapper
 	dosym /opt/brave.com/brave/brave-browser /usr/bin/brave-browser
 	dosym /opt/brave.com/brave/brave-browser /usr/bin/brave
 }
