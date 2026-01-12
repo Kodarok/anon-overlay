@@ -25,12 +25,12 @@ src_install() {
 	insinto /
 	doins -r opt || die
 
-	# Permissions indispensables
-	fperms +x /opt/brave.com/brave/brave
-	fperms +x /opt/brave.com/brave/brave-browser
-	fperms +x /opt/brave.com/brave/chrome-sandbox
+	# Permissions (TOUJOURS via ${ED})
+	fperms +x "${ED}/opt/brave.com/brave/brave"
+	fperms +x "${ED}/opt/brave.com/brave/brave-browser"
+	fperms +x "${ED}/opt/brave.com/brave/chrome-sandbox"
 
-	# Commande utilisateur = wrapper
+	# Symlinks (chemins finaux, pas ${ED})
 	dosym /opt/brave.com/brave/brave-browser /usr/bin/brave-browser
 	dosym /opt/brave.com/brave/brave-browser /usr/bin/brave
 }
