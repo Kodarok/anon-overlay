@@ -13,6 +13,7 @@ S="${WORKDIR}"
 
 QA_PREBUILT="
 	/opt/brave.com/brave/brave
+	/opt/brave.com/brave/brave-browser
 	/opt/brave.com/brave/chrome-sandbox
 "
 
@@ -22,18 +23,18 @@ src_unpack() {
 }
 
 src_install() {
-	insinto /
-	doins -r opt || die
+	# Installer tout l’arbre extrait du deb
+	cp -a . "${D}" || die
 
-	# Forcer exécution sur tous les binaires et le wrapper
-	for f in "${D}/opt/brave.com/brave/brave" \
-			"${D}/opt/brave.com/brave/brave-browser" \
-			"${D}/opt/brave.com/brave/chrome-sandbox"; do
-		[[ -f "$f" ]] && chmod +x "$f"
-	done
+	# Supprimer le cron Brave (non souhaité sur Gentoo)
+	rm -f "${D}/etc/cron.daily/brave-browser"
 
-	# Symlinks vers le wrapper
+	# Permissions exécutables (le deb ne les garantit pas)
+	fperms +x /opt/brave.com/brave/brave
+	fperms +x /opt/brave.com/brave/brave-browser
+	fperms +x /opt/brave.com/brave/chrome-sandbox
+
+	# Symlinks utilisateur
 	dosym /opt/brave.com/brave/brave-browser /usr/bin/brave-browser
 	dosym /opt/brave.com/brave/brave-browser /usr/bin/brave
 }
-
