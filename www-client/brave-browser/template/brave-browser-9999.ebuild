@@ -23,18 +23,20 @@ src_unpack() {
 }
 
 src_install() {
-	# Installer tout l’arbre extrait du deb
-	cp -a . "${D}" || die
+	# Installer tout ce que le deb fournit
+	insinto /
+	doins -r .
 
-	# Supprimer le cron Brave (non souhaité sur Gentoo)
-	rm -f "${D}/etc/cron.daily/brave-browser"
+	# Supprimer le cron Brave (Gentoo-style)
+	rm -f "${ED}/etc/cron.daily/brave-browser"
 
-	# Permissions exécutables (le deb ne les garantit pas)
+	# Permissions exécutables
 	fperms +x /opt/brave.com/brave/brave
 	fperms +x /opt/brave.com/brave/brave-browser
 	fperms +x /opt/brave.com/brave/chrome-sandbox
 
-	# Symlinks utilisateur
+	# Commandes utilisateur
 	dosym /opt/brave.com/brave/brave-browser /usr/bin/brave-browser
 	dosym /opt/brave.com/brave/brave-browser /usr/bin/brave
 }
+
