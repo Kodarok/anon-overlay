@@ -1,4 +1,9 @@
 #!/bin/bash
+
+# required:
+# app-misc/jq
+# net-misc/curl
+
 set -euo pipefail
 
 REPO="/usr/local/portage/localrepo"
