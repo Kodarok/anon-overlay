@@ -33,7 +33,7 @@ bump_package() {
 
 	cachyos-kernel)
     	    UPSTREAM="$CACHYOS_KERNEL_VERSION"   # linux-cachyos-7.0.9-1
-    	    CLEAN="${UPSTREAM#linux-cachyos-}"   # 7.0.9-1
+    	    CLEAN="${UPSTREAM#cachyos-}"   # 7.0.9-1
     	    PV="${CLEAN%-*}"                     # 7.0.9
     	    REV="${CLEAN##*-}"                   # 1
 	    LATEST="${PV}-r${REV}"               # 7.0.9-r1

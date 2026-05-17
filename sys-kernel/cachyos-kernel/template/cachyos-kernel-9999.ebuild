@@ -8,12 +8,10 @@ LLVM_COMPAT=( {17..22} )
 
 inherit kernel-build toolchain-funcs llvm-r1 optfeature
 
-# CachyOS release number mapping: Gentoo -rN -> CachyOS -N+1
-# -r0 (no revision) -> -1, -r1 -> -2, etc.
-CACHYOS_PR="$((${PR#r} + 1))"
-
 # CachyOS pre-patched tarball
-MY_P="cachyos-$(ver_cut 1-3)-${CACHYOS_PR}"
+PV="$(ver_cut 1-3)"
+CACHYOS_PR="1"
+MY_P="cachyos-${PV}-${CACHYOS_PR}"
 
 # Genpatches version - must match K_GENPATCHES_VER in cachyos-sources
 # Sync from: sys-kernel/cachyos-sources/cachyos-sources-${PV}.ebuild (K_GENPATCHES_VER)
