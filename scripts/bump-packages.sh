@@ -6,7 +6,7 @@
 
 set -euo pipefail
 
-REPO="/usr/local/portage/localrepo"
+REPO="/var/db/repos/anon-overlay"
 
 bump_package() {
     local PKGDIR="$1"

@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-REPO="/usr/local/portage/localrepo"
+REPO="/var/db/repos/anon-overlay"
 
 find "$REPO" -type f -name "*.ebuild" \
   ! -name "*-9999.ebuild" \
