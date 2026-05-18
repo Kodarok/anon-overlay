@@ -8,10 +8,12 @@ LLVM_COMPAT=( {17..22} )
 
 inherit kernel-build toolchain-funcs llvm-r1 optfeature
 
+# CachyOS release number mapping: Gentoo -rN -> CachyOS -N+1
+# -r0 (no revision) -> -1, -r1 -> -2, etc.
+CACHYOS_PR="$((${PR#r} + 1))"
+
 # CachyOS pre-patched tarball
-PV="$(ver_cut 1-3)"
-CACHYOS_PR="1"
-MY_P="cachyos-${PV}-${CACHYOS_PR}"
+MY_P="cachyos-$(ver_cut 1-3)-${CACHYOS_PR}"
 
 # Genpatches version - must match K_GENPATCHES_VER in cachyos-sources
 # Sync from: sys-kernel/cachyos-sources/cachyos-sources-${PV}.ebuild (K_GENPATCHES_VER)
@@ -181,7 +183,7 @@ src_prepare() {
 	# --- Apply CachyOS-specific patches ---
 
 	# Fix AutoFDO/Propeller support for LTO_CLANG_THIN_DIST
-	# eapply "${FILESDIR}/6.19.0/misc/0002-fix-autofdo-propeller-lto-thin-dist.patch"
+	eapply "${FILESDIR}/6.19.0/misc/0002-fix-autofdo-propeller-lto-thin-dist.patch"
 
 	# Apply scheduler-specific patches and copy config
 	if use bore; then
@@ -458,4 +460,3 @@ pkg_postinst() {
 }
 
 # a62c86e5d6ce4efcd4f3be9526adfa52aa7286af
-

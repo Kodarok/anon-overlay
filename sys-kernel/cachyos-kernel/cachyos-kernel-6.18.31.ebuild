@@ -8,15 +8,17 @@ LLVM_COMPAT=( {17..22} )
 
 inherit kernel-build toolchain-funcs llvm-r1 optfeature
 
+# CachyOS release number mapping: Gentoo -rN -> CachyOS -N+1
+# -r0 (no revision) -> -1, -r1 -> -2, etc.
+CACHYOS_PR="$((${PR#r} + 1))"
+
 # CachyOS pre-patched tarball
-PV="$(ver_cut 1-3)"
-CACHYOS_PR="1"
-MY_P="cachyos-${PV}-${CACHYOS_PR}"
+MY_P="cachyos-$(ver_cut 1-3)-${CACHYOS_PR}"
 
 # Genpatches version - must match K_GENPATCHES_VER in cachyos-sources
 # Sync from: sys-kernel/cachyos-sources/cachyos-sources-${PV}.ebuild (K_GENPATCHES_VER)
 # Cross-reference: /var/db/repos/gentoo/sys-kernel/gentoo-kernel/gentoo-kernel-${PV}.ebuild (PATCHSET)
-GENPATCHES_VER=10
+GENPATCHES_VER=32
 
 # ZFS commit for kernel-builtin-zfs support
 ZFS_COMMIT="6330a45b06d20125de679aae5f63ba14082671ef"
@@ -41,19 +43,19 @@ LICENSE="GPL-3"
 KEYWORDS="~amd64"
 IUSE="
 	+bore bmq rt rt-bore eevdf
-	deckify kcfi
+	deckify hardened kcfi
 	+clang +autofdo +propeller
-	+llvm-lto-thin llvm-lto-full llvm-lto-thin-dist llvm-lto-none
+	llvm-lto-thin llvm-lto-full +llvm-lto-thin-dist llvm-lto-none
 	kernel-builtin-zfs
 	hz_ticks_100 hz_ticks_250 hz_ticks_300 hz_ticks_500 hz_ticks_600 hz_ticks_750 +hz_ticks_1000
-	+per-gov tickrate_periodic tickrate_idle +tickrate_full +preempt_full preempt_lazy
+	+per-gov tickrate_periodic tickrate_idle +tickrate_full +preempt_full preempt_lazy preempt_voluntary preempt_none
 	+o3 os debug +bbr3
 	+hugepage_always hugepage_madvise
 	mgeneric mgeneric_v1 mgeneric_v2 mgeneric_v3 mgeneric_v4
 	+mnative mzen4
 "
 REQUIRED_USE="
-	^^ ( bore bmq rt rt-bore eevdf )
+	^^ ( bore bmq rt rt-bore eevdf hardened )
 	propeller? ( !llvm-lto-full )
 	autofdo? ( || ( llvm-lto-thin llvm-lto-full llvm-lto-thin-dist ) )
 	^^ ( llvm-lto-thin llvm-lto-full llvm-lto-thin-dist llvm-lto-none )
@@ -63,7 +65,7 @@ REQUIRED_USE="
 	kcfi? ( clang )
 	^^ ( hz_ticks_100 hz_ticks_250 hz_ticks_300 hz_ticks_500 hz_ticks_600 hz_ticks_750 hz_ticks_1000 )
 	^^ ( tickrate_periodic tickrate_idle tickrate_full )
-	^^ ( preempt_full preempt_lazy )
+	^^ ( preempt_full preempt_lazy preempt_voluntary preempt_none )
 	?? ( o3 os debug )
 	^^ ( hugepage_always hugepage_madvise )
 	?? ( mgeneric mgeneric_v1 mgeneric_v2 mgeneric_v3 mgeneric_v4 mnative mzen4 )
@@ -152,11 +154,10 @@ src_prepare() {
 	# which breaks BMQ's patch context for do_sched_yield() and yield_to()
 	use bmq && genpatch_exclude+=" 1810"
 
-	# CachyOS 7.0.5 already carries the rxrpc skb unshare fix from genpatches.
-	genpatch_exclude+=" 2405"
-
-	# CachyOS 7.0.8 already carries the skb shared frag marker fix from genpatches.
-	genpatch_exclude+=" 1500"
+	# Exclude genpatches that conflict with the hardened patchset:
+	# 1510: fs link security defaults conflict with hardened's stricter values
+	# 4567: Gentoo Kconfig additions shift line offsets, breaking hardened's hunks
+	use hardened && genpatch_exclude+=" 1510 4567"
 
 	for genpatch in "${WORKDIR}"/*.patch; do
 		[[ -f "${genpatch}" ]] || continue
@@ -181,7 +182,7 @@ src_prepare() {
 	# --- Apply CachyOS-specific patches ---
 
 	# Fix AutoFDO/Propeller support for LTO_CLANG_THIN_DIST
-	# eapply "${FILESDIR}/6.19.0/misc/0002-fix-autofdo-propeller-lto-thin-dist.patch"
+	eapply "${FILESDIR}/6.18.10/misc/0002-fix-autofdo-propeller-lto-thin-dist.patch"
 
 	# Apply scheduler-specific patches and copy config
 	if use bore; then
@@ -209,6 +210,11 @@ src_prepare() {
 		cp "${files_dir}/config-rt-bore" .config || die
 	fi
 
+	if use hardened; then
+		eapply "${files_dir}/misc/0001-hardened.patch"
+		cp "${files_dir}/config-hardened" .config || die
+	fi
+
 	if use deckify; then
 		cp "${files_dir}/config-deckify" .config || die
 		scripts/config -d RCU_LAZY_DEFAULT_OFF -e AMD_PRIVATE_COLOR || die
@@ -227,7 +233,7 @@ src_prepare() {
 
 	### Selecting the CPU scheduler
 	# CachyOS Scheduler (BORE)
-	if use bore; then
+	if use bore || use hardened; then
 		scripts/config -e SCHED_BORE || die
 	fi
 
@@ -312,11 +318,14 @@ src_prepare() {
 
 	### Select preempt type
 	if ! use rt && ! use rt-bore; then
-		scripts/config -e PREEMPT_DYNAMIC || die
 		if use preempt_full; then
-			scripts/config -e PREEMPT -d PREEMPT_LAZY || die
+			scripts/config -e PREEMPT_DYNAMIC -e PREEMPT -d PREEMPT_VOLUNTARY -d PREEMPT_LAZY -d PREEMPT_NONE || die
 		elif use preempt_lazy; then
-			scripts/config -d PREEMPT -e PREEMPT_LAZY || die
+			scripts/config -e PREEMPT_DYNAMIC -d PREEMPT -d PREEMPT_VOLUNTARY -e PREEMPT_LAZY -d PREEMPT_NONE || die
+		elif use preempt_voluntary; then
+			scripts/config -d PREEMPT_DYNAMIC -d PREEMPT -e PREEMPT_VOLUNTARY -d PREEMPT_LAZY -d PREEMPT_NONE || die
+		elif use preempt_none; then
+			scripts/config -d PREEMPT_DYNAMIC -d PREEMPT -d PREEMPT_VOLUNTARY -d PREEMPT_LAZY -e PREEMPT_NONE || die
 		fi
 	fi
 
@@ -392,6 +401,9 @@ src_prepare() {
 		scripts/config -d GENERIC_CPU -d MZEN4 -e X86_NATIVE_CPU || die
 	fi
 
+	### Enable USER_NS_UNPRIVILEGED
+	scripts/config -e USER_NS || die
+
 	### Enable Clang AutoFDO
 	if use autofdo; then
 		scripts/config -e AUTOFDO_CLANG || die
@@ -458,4 +470,3 @@ pkg_postinst() {
 }
 
 # a62c86e5d6ce4efcd4f3be9526adfa52aa7286af
-
