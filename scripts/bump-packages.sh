@@ -31,13 +31,13 @@ bump_package() {
             LATEST=$(curl -s https://api.github.com/repos/brave/brave-browser/releases/latest | jq -r '.tag_name | sub("^v";"")')
             ;;
 
-	cachyos-kernel)
-    	    UPSTREAM="$CACHYOS_KERNEL_VERSION"   # linux-cachyos-7.0.9-1
-    	    CLEAN="${UPSTREAM#cachyos-}"   # 7.0.9-1
-    	    PV="${CLEAN%-*}"                     # 7.0.9
-    	    REV="${CLEAN##*-}"                   # 1
-	    LATEST="${PV}-r${REV}"               # 7.0.9-r1
-	    ;;
+	#cachyos-kernel)
+    	#    UPSTREAM="$CACHYOS_KERNEL_VERSION"   # linux-cachyos-7.0.9-1
+    	#    CLEAN="${UPSTREAM#cachyos-}"   # 7.0.9-1
+    	#    PV="${CLEAN%-*}"                     # 7.0.9
+    	#    REV="${CLEAN##*-}"                   # 1
+	#    LATEST="${PV}-r${REV}"               # 7.0.9-r1
+	#    ;;
 
         *)
             echo "Package $PKGNAME not supported"
