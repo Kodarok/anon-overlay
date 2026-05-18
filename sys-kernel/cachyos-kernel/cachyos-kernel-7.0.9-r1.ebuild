@@ -181,7 +181,7 @@ src_prepare() {
 	# --- Apply CachyOS-specific patches ---
 
 	# Fix AutoFDO/Propeller support for LTO_CLANG_THIN_DIST
-	# eapply "${FILESDIR}/6.19.0/misc/0002-fix-autofdo-propeller-lto-thin-dist.patch"
+	eapply "${FILESDIR}/6.19.0/misc/0002-fix-autofdo-propeller-lto-thin-dist.patch"
 
 	# Apply scheduler-specific patches and copy config
 	if use bore; then
