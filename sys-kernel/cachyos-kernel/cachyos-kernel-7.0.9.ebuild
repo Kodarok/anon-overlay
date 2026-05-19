@@ -18,7 +18,7 @@ MY_P="cachyos-$(ver_cut 1-3)-${CACHYOS_PR}"
 # Genpatches version - must match K_GENPATCHES_VER in cachyos-sources
 # Sync from: sys-kernel/cachyos-sources/cachyos-sources-${PV}.ebuild (K_GENPATCHES_VER)
 # Cross-reference: /var/db/repos/gentoo/sys-kernel/gentoo-kernel/gentoo-kernel-${PV}.ebuild (PATCHSET)
-GENPATCHES_VER=10
+GENPATCHES_VER=11
 
 # ZFS commit for kernel-builtin-zfs support
 ZFS_COMMIT="6330a45b06d20125de679aae5f63ba14082671ef"
@@ -218,9 +218,6 @@ src_prepare() {
 
 	# Apply user patches (from /etc/portage/patches/)
 	eapply_user
-
-	# Set kernel version suffix
-	echo "-cachyos" > localversion.20-pkgname || die
 
 	# --- Kernel config modifications ---
 
