@@ -410,8 +410,8 @@ src_prepare() {
 	scripts/config --set-val CONSOLE_LOGLEVEL_DEFAULT 7 || die
 
 	### Set LOCALVERSION for dist-kernel identification
-	local myversion="-dist"
-	echo "CONFIG_LOCALVERSION=\"${myversion}\"" > "${T}"/version.config || die
+	#local myversion="-cachyos-dist"
+	#echo "CONFIG_LOCALVERSION=\"${myversion}\"" > "${T}"/version.config || die
 
 	# Ensure modprobe path is correct
 	echo 'CONFIG_MODPROBE_PATH="/sbin/modprobe"' > "${T}"/modprobe.config || die
