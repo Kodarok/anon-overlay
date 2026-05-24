@@ -29,7 +29,23 @@ bump_package() {
             LATEST=$(curl -s https://update.code.visualstudio.com/api/releases/stable | jq -r '.[0]')
             ;;
     brave-browser)
-        return
+        LATEST=""
+
+        for v in $(curl -s https://api.github.com/repos/brave/brave-browser/releases \
+            | jq -r '.[].tag_name | sub("^v";"")'); do
+
+            URL="https://github.com/brave/brave-browser/releases/download/v${v}/brave-browser_${v}_amd64.deb"
+
+            if curl -sfI "$URL" >/dev/null; then
+                LATEST="$v"
+                break
+            fi
+        done
+
+        [[ -z "$LATEST" ]] && {
+            echo "No valid Brave release found"
+            return
+        }
         ;;
 
 	#cachyos-kernel)
