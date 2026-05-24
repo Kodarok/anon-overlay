@@ -18,18 +18,16 @@ QA_PREBUILT="
 "
 
 RDEPEND="
-	app-accessibility/at-spi2-core
 	dev-libs/expat
 	dev-libs/glib
 	dev-libs/nspr
 	dev-libs/nss
+
 	media-libs/alsa-lib
 	media-libs/mesa
-	net-print/cups
+
 	sys-apps/dbus
-	sys-apps/systemd
-	x11-libs/atk
-	x11-libs/cairo
+
 	x11-libs/libX11
 	x11-libs/libXcomposite
 	x11-libs/libXdamage
@@ -39,7 +37,11 @@ RDEPEND="
 	x11-libs/libdrm
 	x11-libs/libxcb
 	x11-libs/libxkbcommon
+
+	x11-libs/cairo
 	x11-libs/pango
+
+	app-accessibility/at-spi2-core
 "
 
 src_unpack() {
