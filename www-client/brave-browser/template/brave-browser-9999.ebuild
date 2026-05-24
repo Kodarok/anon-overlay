@@ -7,7 +7,7 @@ SLOT="0"
 KEYWORDS="amd64"
 RESTRICT="strip"
 
-SRC_URI="https://github.com/brave/brave-browser/releases/download/v${PV}/brave-browser_${PV}_amd64.deb"
+SRC_URI="https://brave-browser-apt-release.s3.brave.com/brave-browser_amd64.deb"
 
 S="${WORKDIR}"
 
@@ -43,8 +43,8 @@ RDEPEND="
 "
 
 src_unpack() {
-	ar x "${DISTDIR}/${A}" || die
-	tar -xf data.tar.* || die
+    ar x "${A}" || die
+    tar -xf data.tar.* || die
 }
 
 src_install() {

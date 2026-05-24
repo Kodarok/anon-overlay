@@ -12,8 +12,9 @@ REPO="/var/db/repos/anon-overlay"
 
 bump_package() {
     local PKGDIR="$1"
+
     local TEMPLATE
-    TEMPLATE=$(ls "$PKGDIR/template/"*"-9999.ebuild" 2>/dev/null | head -n1)
+    TEMPLATE=$(find "$PKGDIR/template" -maxdepth 1 -name '*-9999.ebuild' | head -n1)
 
     # Si pas de template, on quitte
     [[ -z "$TEMPLATE" ]] && return
@@ -27,9 +28,9 @@ bump_package() {
         vscode-bin)
             LATEST=$(curl -s https://update.code.visualstudio.com/api/releases/stable | jq -r '.[0]')
             ;;
-        brave-browser)
-            LATEST=$(curl -s https://api.github.com/repos/brave/brave-browser/releases/latest | jq -r '.tag_name | sub("^v";"")')
-            ;;
+    brave-browser)
+        return
+        ;;
 
 	#cachyos-kernel)
     	#    UPSTREAM="$CACHYOS_KERNEL_VERSION"   # linux-cachyos-7.0.9-1
