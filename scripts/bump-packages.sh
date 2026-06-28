@@ -50,7 +50,10 @@ bump_package() {
             ;;
 
 	lm-studio)
-            LATEST="$(...)"
+	    LATEST="$(curl -s https://lmstudio.ai/changelog \
+                | grep -oE 'LM Studio [0-9]+\.[0-9]+\.[0-9]+' \
+                | head -n1 \
+                | sed 's/LM Studio //')"
 
             VERSION="${LATEST%-*}"
             BUILD="${LATEST##*-}"
