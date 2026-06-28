@@ -20,9 +20,5 @@ src_install() {
     cp -a opt "${ED}/" || die
     cp -a usr "${ED}/" || die
 
-    # sécurité: garantir présence du dossier
-    dodir /usr/share/applications
-
-    dosym /opt/LM-Studio/lm-studio \
-        /usr/share/applications/lm-studio.desktop
+    dosym /opt/LM-Studio/lm-studio /usr/bin/lm-studio
 }
