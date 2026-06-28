@@ -17,5 +17,7 @@ src_unpack() {
 }
 
 src_install() {
-	cp -r usr "${D}/" || die
+    cp -a opt "${ED}/" || die
+
+    dosym /opt/LM-Studio/lm-studio /usr/bin/lm-studio
 }

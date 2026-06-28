@@ -17,9 +17,7 @@ src_unpack() {
 }
 
 src_install() {
-    insinto /
-    doins -r opt
-    doins -r usr
+    cp -a opt "${ED}/" || die
 
-    dosym ../opt/LM-Studio/lm-studio /usr/bin/lm-studio
+    dosym /opt/LM-Studio/lm-studio /usr/bin/lm-studio
 }
