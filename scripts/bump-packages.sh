@@ -101,3 +101,6 @@ for PKGDIR in "$REPO"/*/*; do
     [[ -d "$PKGDIR/template" ]] || continue
     bump_package "$PKGDIR"
 done
+
+echo "=== Packages disponibles ==="
+find "$REPO" -name '*.ebuild' | sort
