@@ -62,6 +62,6 @@ src_install() {
 	fperms +x /opt/brave.com/brave/chrome-sandbox
 
 	# Commandes utilisateur
-	dosym /opt/brave.com/brave/brave-browser /usr/bin/brave-browser
-	dosym /opt/brave.com/brave/brave-browser /usr/bin/brave
+	dosym /opt/brave.com/brave/brave-browser /usr/bin/brave-browser-bin
+	dosym /opt/brave.com/brave/brave-browser /usr/bin/brave-bin
 }
