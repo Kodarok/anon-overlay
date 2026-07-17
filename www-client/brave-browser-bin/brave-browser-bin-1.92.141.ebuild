@@ -49,23 +49,19 @@ src_unpack() {
     tar -xf data.tar.* || die
 }
 
-# src_install() {
-#	# Copier exactement ce que fournit le .deb
-#	cp -a . "${D}" || die
-#
-#	# Supprimer le cron Brave (non souhaité sur Gentoo)
-#	rm -f "${D}/etc/cron.daily/brave-browser"
-#
-#	# Permissions exécutables (deb foireux)
-#	fperms +x /opt/brave.com/brave/brave
-#	fperms +x /opt/brave.com/brave/brave-browser
-#	fperms +x /opt/brave.com/brave/chrome-sandbox
-#
-#	# Commandes utilisateur
-#	dosym /opt/brave.com/brave/brave-browser /usr/bin/brave-browser-bin
-#	dosym /opt/brave.com/brave/brave-browser /usr/bin/brave-bin
-# }
-
 src_install() {
-    cp -a opt usr "${ED}/" || die
+	# Copier exactement ce que fournit le .deb
+	cp -a . "${D}" || die
+
+	# Supprimer le cron Brave (non souhaité sur Gentoo)
+	rm -f "${D}/etc/cron.daily/brave-browser"
+
+	# Permissions exécutables (deb foireux)
+	fperms +x /opt/brave.com/brave/brave
+	fperms +x /opt/brave.com/brave/brave-browser
+	fperms +x /opt/brave.com/brave/chrome-sandbox
+
+	# Commandes utilisateur
+	dosym /opt/brave.com/brave/brave-browser /usr/bin/brave-browser-bin
+	dosym /opt/brave.com/brave/brave-browser /usr/bin/brave-bin
 }

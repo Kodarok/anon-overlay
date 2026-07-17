@@ -16,9 +16,13 @@ src_unpack() {
 	tar -xf data.tar.* || die
 }
 
-src_install() {
-    cp -a opt "${ED}/" || die
-    cp -a usr "${ED}/" || die
-
-    dosym /opt/LM-Studio/lm-studio /usr/bin/lm-studio-bin
+# src_install() {
+#    cp -a opt "${ED}/" || die
+#    cp -a usr "${ED}/" || die
+#
+#    dosym /opt/LM-Studio/lm-studio /usr/bin/lm-studio-bin
+# }
+#
+# src_install() {
+    cp -a opt usr "${ED}/" || die
 }
