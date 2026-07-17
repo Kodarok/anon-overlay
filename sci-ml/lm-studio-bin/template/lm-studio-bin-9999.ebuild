@@ -22,7 +22,7 @@ src_unpack() {
 #
 #    dosym /opt/LM-Studio/lm-studio /usr/bin/lm-studio-bin
 # }
-#
-# src_install() {
+
+src_install() {
     cp -a opt usr "${ED}/" || die
 }
