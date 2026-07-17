@@ -29,7 +29,7 @@ bump_package() {
 	    URL="https://update.code.visualstudio.com/${LATEST}/linux-deb-x64/stable"
             ;;
 
-        brave-browser)
+        brave-browser-bin)
             LATEST=""
 
             for v in $(curl -s https://api.github.com/repos/brave/brave-browser/releases \
@@ -49,7 +49,7 @@ bump_package() {
             }
             ;;
 
-	lm-studio)
+	lm-studio-bin)
 	    LATEST="$(curl -s https://lmstudio.ai/changelog \
                 | grep -oE 'LM Studio [0-9]+\.[0-9]+\.[0-9]+' \
                 | head -n1 \
