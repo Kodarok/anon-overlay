@@ -12,8 +12,8 @@ SRC_URI="https://update.code.visualstudio.com/@VERSION@/linux-deb-x64/stable -> 
 S="${WORKDIR}"
 
 src_unpack() {
-	ar x "${DISTDIR}/vscode-@VERSION@.deb" || die
-	tar -xf data.tar.* || die
+    ar x "${DISTDIR}/${A}" || die
+    tar -xf data.tar.* || die
 }
 
 src_install() {

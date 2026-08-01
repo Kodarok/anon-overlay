@@ -92,6 +92,7 @@ bump_package() {
         -e "s|@FILENAME@|${FILENAME}|g" \
         "$TEMPLATE" > "$NEW"
 
+    echo "Generating manifest for $NEW"
     ebuild "$NEW" manifest
 
     echo "Updated $PKGNAME to $LATEST"

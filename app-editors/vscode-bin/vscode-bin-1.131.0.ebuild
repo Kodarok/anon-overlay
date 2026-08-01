@@ -7,13 +7,13 @@ LICENSE="Microsoft"
 SLOT="0"
 KEYWORDS="amd64"
 
-SRC_URI="https://update.code.visualstudio.com/1.129.0/linux-deb-x64/stable -> vscode-1.129.0.deb"
+SRC_URI="https://update.code.visualstudio.com/1.131.0/linux-deb-x64/stable -> vscode-1.131.0.deb"
 
 S="${WORKDIR}"
 
 src_unpack() {
-	ar x "${DISTDIR}/vscode-1.129.0.deb" || die
-	tar -xf data.tar.* || die
+    ar x "${DISTDIR}/${A}" || die
+    tar -xf data.tar.* || die
 }
 
 src_install() {
