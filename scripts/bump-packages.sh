@@ -50,10 +50,21 @@ bump_package() {
             ;;
 
 	lm-studio-bin)
-	    LATEST="$(curl -s https://lmstudio.ai/changelog \
-                | grep -oE 'LM Studio [0-9]+\.[0-9]+\.[0-9]+' \
-                | head -n1 \
-                | sed 's/LM Studio //')"
+            LATEST="$(
+            	curl -fsS https://lmstudio.ai/changelog |
+            	grep -oE 'LM Studio [0-9]+\.[0-9]+\.[0-9]+' |
+            	head -n1 |
+            	sed 's/LM Studio //'
+            )" || {
+            	echo "Unable to determine latest LM Studio version"
+            	return
+            }
+
+            if [[ -z "$LATEST" ]]; then
+            	echo "Unable to determine latest LM Studio version"
+            	return
+	    fi
+
 
             VERSION="${LATEST%-*}"
             BUILD="${LATEST##*-}"
