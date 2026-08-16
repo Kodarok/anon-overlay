@@ -7,12 +7,12 @@ LICENSE="LM-Studio"
 SLOT="0"
 KEYWORDS="amd64"
 
-SRC_URI="https://lmstudio.ai/download/latest/linux/x64?format=deb -> LM-Studio-0.4.19-0.4.19.deb"
+SRC_URI="https://installers.lmstudio.ai/linux/x64/0.4.21-2/LM-Studio-0.4.21-2-x64.deb -> LM-Studio-0.4.21-2-x64.deb"
 
 S="${WORKDIR}"
 
 src_unpack() {
-	ar x "${DISTDIR}/LM-Studio-0.4.19-0.4.19.deb" || die
+	ar x "${DISTDIR}/LM-Studio-0.4.21-2-x64.deb" || die
 	tar -xf data.tar.* || die
 }
 

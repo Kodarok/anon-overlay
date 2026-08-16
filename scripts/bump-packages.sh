@@ -49,7 +49,7 @@ bump_package() {
             }
             ;;
 
-	lm-studio-bin)
+    	lm-studio-bin)
     		DOWNLOAD_URL="$(
         		curl -fsSL -o /dev/null \
             		-w '%{url_effective}' \
@@ -65,6 +65,17 @@ bump_package() {
         		echo "Unable to determine latest LM Studio version"
         		return
     		}
+
+    		# LM Studio fournit une version Debian :
+    		#   0.4.21-2
+    		#
+    		# Gentoo utilise :
+    		#   0.4.21_p2
+    		if [[ "$LATEST" == *-* ]]; then
+        		VERSION_ONLY="${LATEST%-*}"
+        		BUILD="${LATEST##*-}"
+        		LATEST="${VERSION_ONLY}_p${BUILD}"
+    		fi
 
     		URL="$DOWNLOAD_URL"
     		FILENAME="$(basename "${DOWNLOAD_URL%%\?*}")"
