@@ -50,28 +50,25 @@ bump_package() {
             ;;
 
 	lm-studio-bin)
-            LATEST="$(
-            	curl -fsS https://lmstudio.ai/changelog |
-            	grep -oE 'LM Studio [0-9]+\.[0-9]+\.[0-9]+' |
-            	head -n1 |
-            	sed 's/LM Studio //'
-            )" || {
-            	echo "Unable to determine latest LM Studio version"
-            	return
-            }
+    		DOWNLOAD_URL="$(
+        		curl -fsSL -o /dev/null \
+            		-w '%{url_effective}' \
+            		'https://lmstudio.ai/download/latest/linux/x64?format=deb'
+    		)"
 
-            if [[ -z "$LATEST" ]]; then
-            	echo "Unable to determine latest LM Studio version"
-            	return
-	    fi
+    		LATEST="$(
+        		printf '%s\n' "$DOWNLOAD_URL" |
+        		sed -nE 's|.*/linux/x64/([^/]+)/.*|\1|p'
+    		)"
 
+    		[[ -z "$LATEST" ]] && {
+        		echo "Unable to determine latest LM Studio version"
+        		return
+    		}
 
-            VERSION="${LATEST%-*}"
-            BUILD="${LATEST##*-}"
-
-            URL="https://lmstudio.ai/download/latest/linux/x64?format=deb"
-            FILENAME="LM-Studio-${VERSION}-${BUILD}.deb"
-        ;;
+    		URL="$DOWNLOAD_URL"
+    		FILENAME="$(basename "${DOWNLOAD_URL%%\?*}")"
+	    ;;
 
     	*)
             echo "Package $PKGNAME not supported"
